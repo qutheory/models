@@ -46,7 +46,7 @@ extension ModelOrIdentifier {
 
 extension ModelOrIdentifier {
     /// Returns an identifier or throws `ModelsError.noIdentifier`
-    public func assertId() throws -> Node {
+    public func assertIdentifier() throws -> Node {
         guard let i = getIdentifier() else {
             throw ModelsError.noIdentifier
         }
