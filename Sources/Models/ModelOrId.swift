@@ -61,3 +61,32 @@ extension ModelOrIdentifier {
         return m
     }
 }
+
+// MARK: JSON
+import JSON
+
+extension ModelOrIdentifier where Model: JSONConvertible {
+    public func makeJSON(idKey: String = "id") throws -> JSON {
+        let json: JSON
+        switch self {
+        case .identifier(let id):
+            json = try JSON(node: [idKey: id])
+        case .model(let model):
+            json = try model.makeJSON()
+        }
+        return json
+    }
+}
+
+extension ModelOrIdentifier where Model: JSONInitializable {
+    public init(json: JSON, idKey: String = "id") throws {
+        do {
+            let model = try Model(json: json)
+            self = .model(model)
+        } catch {
+            let id = try json.get(idKey) as Node
+            self = .identifier(id)
+        }
+    }
+}
+
