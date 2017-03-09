@@ -14,3 +14,9 @@ extension Identifiable {
         return i
     }
 }
+
+extension Identifier: CustomStringConvertible {
+    public var description: String {
+        return string ?? ""
+    }
+}
