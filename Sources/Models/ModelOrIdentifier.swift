@@ -16,19 +16,19 @@
 /// other properties are not available. Instead of making all of the properties
 /// optional on the Owner model, use the `ModelOrId` enum to wrap.
 public enum ModelOrIdentifier<Model: Identifiable> {
-    case identifier(Node)
+    case identifier(Identifier)
     case model(Model)
 }
 
 extension ModelOrIdentifier {
     /// Returns the id if the id is wrapped 
     /// or if the wrapped model has an identifier.
-    public func getIdentifier() -> Node? {
+    public func getIdentifier() -> Identifier? {
         switch self {
         case .identifier(let id):
             return id
         case .model(let model):
-            return model.identifier
+            return model.id
         }
     }
 
@@ -46,7 +46,7 @@ extension ModelOrIdentifier {
 
 extension ModelOrIdentifier {
     /// Returns an identifier or throws `ModelsError.noIdentifier`
-    public func assertIdentifier() throws -> Node {
+    public func assertIdentifier() throws -> Identifier {
         guard let i = getIdentifier() else {
             throw ModelsError.noIdentifier
         }
@@ -84,7 +84,7 @@ extension ModelOrIdentifier where Model: JSONInitializable {
             let model = try Model(json: json)
             self = .model(model)
         } catch {
-            let id = try json.get(idKey) as Node
+            let id = try json.get(idKey) as Identifier
             self = .identifier(id)
         }
     }
