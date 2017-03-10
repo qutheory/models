@@ -15,7 +15,7 @@
 /// Here the `Pet` model should have an id for `Owner`, but all of the
 /// other properties are not available. Instead of making all of the properties
 /// optional on the Owner model, use the `ModelOrId` enum to wrap.
-public enum ModelOrIdentifier<Model: Identifiable> {
+public enum ModelOrIdentifier<Model: Identifiable & JSONConvertible> {
     case identifier(Identifier)
     case model(Model)
 }
@@ -65,28 +65,25 @@ extension ModelOrIdentifier {
 // MARK: JSON
 import JSON
 
-extension ModelOrIdentifier where Model: JSONConvertible {
-    public func makeJSON(idKey: String = "id") throws -> JSON {
+extension ModelOrIdentifier: JSONConvertible {
+    public init(json: JSON) throws {
+        do {
+            let model = try Model(json: json)
+            self = .model(model)
+        } catch {
+            let id = try json.get("id") as Identifier
+            self = .identifier(id)
+        }
+    }
+
+    public func makeJSON() throws -> JSON {
         let json: JSON
         switch self {
         case .identifier(let id):
-            json = try JSON(node: [idKey: id])
+            json = try JSON(node: ["id": id])
         case .model(let model):
             json = try model.makeJSON()
         }
         return json
     }
 }
-
-extension ModelOrIdentifier where Model: JSONInitializable {
-    public init(json: JSON, idKey: String = "id") throws {
-        do {
-            let model = try Model(json: json)
-            self = .model(model)
-        } catch {
-            let id = try json.get(idKey) as Identifier
-            self = .identifier(id)
-        }
-    }
-}
-
