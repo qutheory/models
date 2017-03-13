@@ -3,49 +3,63 @@ import JSON
 
 // Represents a page of results for the entity
 public struct Page<T: Entity> {
-    public let query: Query<T>
     public let number: Int
+    public let data: [T]
+    public let size: Int
+    public let total: Int
 
     // The query used must already be filtered for
     // pagination and ready for `.all()` call
-    public init(_ query: Query<T>, number: Int) {
-        self.query = query
-        self.number = number
+    public init(
+        number: Int,
+        data: [T],
+        size: Int = defaultPageSize,
+        total: Int
+        ) {
+        self.number = number > 0 ? number : 1
+        self.data = data
+        self.size = size
+        self.total = total
     }
 }
 
 extension Page: JSONRepresentable {
     public func makeJSON() throws -> JSON {
         var json = JSON()
-        // current page number
-        try json.set("page.number", number + 1) // start at 1
-
-        // get total number
-        let total = try T.query().count()
+        try json.set("page.number", number)
         try json.set("page.total", total)
-
-        // get page size and total pages
-        if let size = query.limit?.count {
-            try json.set("page.size", size)
-            try json.set("page.count", total / size)
+        try json.set("page.size", size)
+        let count = total / size
+        if number < count {
+            try json.set("page.next", number + 1)
         }
-
-        // get data
-        let data = try query.all()
+        if number > 1 {
+            try json.set("page.previous", number - 1)
+        }
+        try json.set("page.count", count)
         try json.set("data", data)
-
         return json
     }
 }
 
-public var defaultPageCount = 10
+public var defaultPageSize = 10
 
-extension QueryRepresentable where T: JSONConvertible {
-    public func paginate(page: Int, count: Int = defaultPageCount) throws -> Page<T> {
+extension QueryRepresentable {
+    public func paginate(page: Int, count: Int = defaultPageSize) throws -> Page<T> {
+        let page = page > 0 ? page : 1
         let query = try makeQuery()
-            .sort("createdAt", .descending)
-        query.limit = Limit(count: count, offset: page * count)
+        let total = try query.count()
 
-        return Page(query, number: page)
+        query.limit = Limit(count: count, offset: (page - 1) * count)
+        let data = try query
+            .sort("createdAt", .descending)
+            .all()
+
+        return Page(
+            number: page,
+            data: data,
+            size: count,
+            total: total
+        )
     }
 }
