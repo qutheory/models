@@ -45,7 +45,7 @@ extension Page: JSONRepresentable {
 public var defaultPageSize = 10
 
 extension QueryRepresentable {
-    public func paginate(page: Int, count: Int = defaultPageSize) throws -> Page<T> {
+    public func paginate(page: Int, count: Int = defaultPageSize) throws -> Page<E> {
         let page = page > 0 ? page : 1
         let query = try makeQuery()
         let total = try query.count()
