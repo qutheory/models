@@ -1,5 +1,5 @@
 import XCTest
-@testable import Models
+@testable import CloudModels
 
 class ModelsTests: XCTestCase {
     func testExample() {

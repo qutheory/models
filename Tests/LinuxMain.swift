@@ -1,5 +1,5 @@
 import XCTest
-@testable import ModelsTests
+@testable import CloudModelsTests
 
 XCTMain([
     testCase(ModelsTests.allTests),
