@@ -1,11 +1,9 @@
-extension Server {
-    public enum Status {
-        case busy
-        case free
-    }
+public enum ServerStatus {
+    case busy
+    case free
 }
 
-extension Server.Status: NodeConvertible {
+extension ServerStatus: NodeConvertible {
     public init(node: Node) throws {
         switch node.string ?? "" {
         case "busy":

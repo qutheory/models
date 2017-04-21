@@ -1,15 +1,15 @@
-final class Server: Extensible, Identifiable {
+public final class Server: Extensible, Identifiable {
     public var id: Identifier?
     public var name: String
     public var hostname: String
-    public var status: Status
+    public var status: ServerStatus
     public var extend: [String: Any]
     
     public init(
         id: Identifier? = nil,
         name: String,
         hostname: String,
-        status: Status
+        status: ServerStatus
     ) {
         self.id = id
         self.name = name
@@ -32,7 +32,7 @@ extension Server: JSONConvertible {
         )
     }
     
-    func makeJSON() throws -> JSON {
+    public func makeJSON() throws -> JSON {
         var json = JSON()
         try json.set("id", id)
         try json.set("name", name)

@@ -122,3 +122,32 @@ extension ProjectPermission: JSONConvertible {
         return json
     }
 }
+
+// MARK: JSON Keys
+extension Array where Iterator.Element == ProjectPermission {
+    public init(keysJSON: JSON) {
+        guard let array = keysJSON.array else {
+            self = []
+            return
+        }
+        
+        let permissions: [ProjectPermission] = array.flatMap { item in
+            guard let string = item.string else {
+                return nil
+            }
+            
+            return ProjectPermission(key: string)
+        }
+        
+        self = permissions
+    }
+}
+
+extension Array where Iterator.Element: ProjectPermission {
+    public func makeKeysJSON() -> JSON {
+        let array: [JSON] = map { permission in
+            return JSON(permission.key)
+        }
+        return JSON(array)
+    }
+}
