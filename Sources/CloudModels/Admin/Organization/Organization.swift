@@ -1,14 +1,17 @@
 public final class Organization: Extensible, Identifiable {
     public var id: Identifier?
     public var name: String
+    public var credits: Double
     public var extend: [String: Any]
 
     public init(
-        _ id: Identifier? = nil,
-        name: String
+        id: Identifier? = nil,
+        name: String,
+        credits: Double = 0
     ) {
         self.id = id
         self.name = name
+        self.credits = credits
         self.extend = [:]
     }
 }
@@ -18,9 +21,10 @@ import JSON
 
 extension Organization: JSONConvertible {
     public convenience init(json: JSON) throws {
-        self.init(
-            try json.get("id"),
-            name: try json.get("name")
+        try self.init(
+            id: json.get("id"),
+            name: json.get("name"),
+            credits: json.get("credits")
         )
     }
 
@@ -28,6 +32,7 @@ extension Organization: JSONConvertible {
         var json = JSON()
         try json.set("id", id)
         try json.set("name", name)
+        try json.set("credits", credits)
         return json
     }
 }
