@@ -1,14 +1,20 @@
 public final class ProjectPermission: Extensible, Identifiable {
     public var id: Identifier?
-    public let key: String
+    public var key: String
+    public var name: String
+    public var description: String
     public var extend: [String: Any]
     
     public init(
-        _ id: Identifier? = nil,
-        key: String
-        ) {
+        id: Identifier? = nil,
+        key: String,
+        name: String,
+        description: String
+    ) {
         self.id = id
         self.key = key
+        self.name = name
+        self.description = description
         self.extend = [:]
     }
 }
@@ -46,53 +52,53 @@ extension ProjectPermission {
     // Project
     
     public static var read: ProjectPermission {
-        return ProjectPermission(key: "projectRead")
+        return ProjectPermission(key: "projectRead", name: "" , description: "")
     }
     
     public static var update: ProjectPermission {
-        return ProjectPermission(key: "projectUpdate")
+        return ProjectPermission(key: "projectUpdate", name: "" , description: "")
     }
     
     public static var delete: ProjectPermission {
-        return ProjectPermission(key: "projectDelete")
+        return ProjectPermission(key: "projectDelete", name: "" , description: "")
     }
     
     // Deployment
     
     public static var createDeployment: ProjectPermission {
-        return ProjectPermission(key: "deploymentCreate")
+        return ProjectPermission(key: "deploymentCreate", name: "" , description: "")
     }
     
     public static var readDeployment: ProjectPermission {
-        return ProjectPermission(key: "deploymentRead")
+        return ProjectPermission(key: "deploymentRead", name: "" , description: "")
     }
     
     public static var updateDeployment: ProjectPermission {
-        return ProjectPermission(key: "deploymentUpdate")
+        return ProjectPermission(key: "deploymentUpdate", name: "" , description: "")
     }
     
     // Application
     
     public static var createApplication: ProjectPermission {
-        return ProjectPermission(key: "applicationCreate")
+        return ProjectPermission(key: "applicationCreate", name: "" , description: "")
     }
     
     public static var readApplication: ProjectPermission {
-        return ProjectPermission(key: "applicationRead")
+        return ProjectPermission(key: "applicationRead", name: "" , description: "")
     }
     
     public static var updateApplication: ProjectPermission {
-        return ProjectPermission(key: "applicationUpdate")
+        return ProjectPermission(key: "applicationUpdate", name: "" , description: "")
     }
     
     public static var deleteApplication: ProjectPermission {
-        return ProjectPermission(key: "applicationDelete")
+        return ProjectPermission(key: "applicationDelete", name: "" , description: "")
     }
     
     // Meta
     
     public static var updatePermission: ProjectPermission {
-        return ProjectPermission(key: "permissionUpdate")
+        return ProjectPermission(key: "permissionUpdate", name: "" , description: "")
     }
 }
 
@@ -109,9 +115,11 @@ import JSON
 
 extension ProjectPermission: JSONConvertible {
     public convenience init(json: JSON) throws {
-        self.init(
-            try json.get("id"),
-            key: try json.get("key")
+        try self.init(
+            id: json.get("id"),
+            key: json.get("key"),
+            name: json.get("name"),
+            description: json.get("description")
         )
     }
     
@@ -119,6 +127,8 @@ extension ProjectPermission: JSONConvertible {
         var json = JSON()
         try json.set("id", id)
         try json.set("key", key)
+        try json.set("name", name)
+        try json.set("description", description)
         return json
     }
 }
@@ -136,7 +146,7 @@ extension Array where Iterator.Element == ProjectPermission {
                 return nil
             }
             
-            return ProjectPermission(key: string)
+            return ProjectPermission(key: string, name: "" , description: "")
         }
         
         self = permissions
