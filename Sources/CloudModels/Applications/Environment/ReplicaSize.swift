@@ -47,3 +47,9 @@ extension ReplicaSize: NodeConvertible {
         return Node(string)
     }
 }
+
+extension ReplicaSize {
+    public static var all: [ReplicaSize] {
+        return [.free, .small, .medium, .large, .xlarge]
+    }
+}

@@ -11,11 +11,11 @@ public final class Environment: Extensible, Identifiable {
     }
 
     public init(
-        _ id: Identifier? = nil,
-        _ hosting: ModelOrIdentifier<Hosting>,
+        id: Identifier? = nil,
+        hosting: ModelOrIdentifier<Hosting>,
         name: String? = nil,
         replicas: Int? = nil,
-        _ replicaSize: ReplicaSize,
+        replicaSize: ReplicaSize,
         defaultBranch: String? = nil
     ) {
         self.id = id
@@ -33,13 +33,13 @@ import JSON
 
 extension Environment: JSONConvertible {
     public convenience init(json: JSON) throws {
-        self.init(
-            try json.get("id"),
-            try ModelOrIdentifier(json: json.get("hosting")),
-            name: try json.get("name"),
-            replicas: try json.get("replicas"),
-            try json.get("replicaSize"),
-            defaultBranch: try json.get("defaultBranch")
+        try self.init(
+            id: json.get("id"),
+            hosting: ModelOrIdentifier(json: json.get("hosting")),
+            name: json.get("name"),
+            replicas: json.get("replicas"),
+            replicaSize: json.get("replicaSize"),
+            defaultBranch: json.get("defaultBranch")
         )
     }
 
