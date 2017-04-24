@@ -6,8 +6,8 @@ public final class Configuration: Extensible, Identifiable {
     public var extend: [String: Any]
 
     public init(
-        _ id: Identifier? = nil,
-        _ environment: ModelOrIdentifier<Environment>,
+        id: Identifier? = nil,
+        environment: ModelOrIdentifier<Environment>,
         key: String,
         value: String
     ) {
@@ -22,11 +22,11 @@ public final class Configuration: Extensible, Identifiable {
 // MARK: JSON
 import JSON
 
-extension Configuration {
+extension Configuration: JSONConvertible {
     public convenience init(json: JSON) throws {
-        self.init(
-            try json.get("id"),
-            try ModelOrIdentifier(json: try json.get("environment")),
+        try self.init(
+            id: json.get("id"),
+            environment: ModelOrIdentifier(json: try json.get("environment")),
             key: try json.get("key"),
             value: try json.get("value")
         )

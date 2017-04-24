@@ -1,17 +1,17 @@
 public final class Hosting: Extensible, Identifiable {
     public var id: Identifier?
     public var application: ModelOrIdentifier<Application>
-    public var gitUrl: String
+    public var gitURL: String
     public var extend: [String: Any]
     
     public init(
-        _ id: Identifier? = nil,
-        _ application: ModelOrIdentifier<Application>,
-        gitUrl: String
+        id: Identifier? = nil,
+        application: ModelOrIdentifier<Application>,
+        gitURL: String
     ) {
         self.id = id
         self.application = application
-        self.gitUrl = gitUrl
+        self.gitURL = gitURL
         self.extend = [:]
     }
 }
@@ -21,10 +21,10 @@ import JSON
 
 extension Hosting: JSONConvertible {
     public convenience init(json: JSON) throws {
-        self.init(
-            try json.get("id"),
-            try ModelOrIdentifier(json: try json.get("application")),
-            gitUrl: try json.get("gitUrl")
+        try self.init(
+            id: json.get("id"),
+            application: ModelOrIdentifier(json: try json.get("application")),
+            gitURL: json.get("gitURL")
         )
     }
     
@@ -32,7 +32,7 @@ extension Hosting: JSONConvertible {
         var json = JSON()
         try json.set("id", id)
         try json.set("application", application.makeJSON())
-        try json.set("gitUrl", gitUrl)
+        try json.set("gitURL", gitURL)
         return json
     }
 }
