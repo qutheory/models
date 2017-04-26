@@ -1,5 +1,6 @@
 public enum ReplicaSize {
     case free
+    case hobby
     case small
     case medium
     case large
@@ -11,6 +12,8 @@ extension ReplicaSize: NodeConvertible {
         switch node.string ?? "" {
         case "free":
             self = .free
+        case "hobby":
+            self = .hobby
         case "small":
             self = .small
         case "medium":
@@ -32,6 +35,8 @@ extension ReplicaSize: NodeConvertible {
         switch self {
         case .free:
             return "free"
+        case .hobby:
+            return "hobby"
         case .small:
             return "small"
         case .medium:
@@ -50,6 +55,6 @@ extension ReplicaSize: NodeConvertible {
 
 extension ReplicaSize {
     public static var all: [ReplicaSize] {
-        return [.free, .small, .medium, .large, .xlarge]
+        return [.free, .hobby, .small, .medium, .large, .xlarge]
     }
 }
