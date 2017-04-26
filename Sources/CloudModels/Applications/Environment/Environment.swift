@@ -26,6 +26,10 @@ public final class Environment: Extensible, Identifiable {
         self.defaultBranch = defaultBranch ?? "master"
         self.extend = [:]
     }
+    
+    public var monthlyCost: Double {
+        return replicaSize.monthlyCost * Double(replicas)
+    }
 }
 
 // MARK: JSON
@@ -52,6 +56,7 @@ extension Environment: JSONConvertible {
         try json.set("defaultBranch", defaultBranch)
         try json.set("hosting", hosting.makeJSON())
         try json.set("running", running)
+        try json.set("monthlyCost", monthlyCost)
         return json
     }
 }

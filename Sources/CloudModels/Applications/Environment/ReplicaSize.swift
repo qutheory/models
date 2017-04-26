@@ -58,3 +58,53 @@ extension ReplicaSize {
         return [.free, .hobby, .small, .medium, .large, .xlarge]
     }
 }
+
+extension ReplicaSize: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .free:
+            return "Free"
+        case .hobby:
+            return "Hobby"
+        case .small:
+            return "Small"
+        case .medium:
+            return "Medium"
+        case .large:
+            return "Large"
+        case .xlarge:
+            return "X-Large"
+        }
+    }
+}
+
+// MARK: Cost
+
+
+extension ReplicaSize {
+    public var monthlyCost: Double {
+        switch self {
+        case .free:
+            return 0
+        case .hobby:
+            return 6.0
+        case .small:
+            return 29.0
+        case .medium:
+            return 61.0
+        case .large:
+            return 222.0
+        case .xlarge:
+            return 375.0
+        }
+    }
+}
+
+
+let hoursInMonth = 730.0
+
+extension Double {
+    public var monthlyToHourly: Double {
+        return self / hoursInMonth
+    }
+}
