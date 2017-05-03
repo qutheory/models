@@ -2,14 +2,14 @@ public final class Cache: Identifiable, Extensible {
     public var id: Identifier?
     public var server: ModelOrIdentifier<CacheServer>
     public var environment: ModelOrIdentifier<Environment>
-    public var username: String
+    public var username: String?
     public var extend: [String: Any]
     
     public init(
         id: Identifier? = nil,
         server: ModelOrIdentifier<CacheServer>,
         environment: ModelOrIdentifier<Environment>,
-        username: String
+        username: String? = nil
     ) throws {
         self.id = id
         self.server = server
