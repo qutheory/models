@@ -7,9 +7,9 @@ public final class Domain: Extensible, Identifiable {
     public var extend: [String: Any]
 
     public init(
-        _ id: Identifier? = nil,
-        _ environment: ModelOrIdentifier<Environment>,
-        _ certificate: ModelOrIdentifier<Certificate>?,
+        id: Identifier? = nil,
+        environment: ModelOrIdentifier<Environment>,
+        certificate: ModelOrIdentifier<Certificate>?,
         domain: String,
         path: String? = nil
     ) {
@@ -27,12 +27,12 @@ import JSON
 
 extension Domain: JSONConvertible {
     public convenience init(json: JSON) throws {
-        self.init(
-            try json.get("id"),
-            try ModelOrIdentifier(json: json.get("environment")),
-            try ModelOrIdentifier(json: json.get("certificate")),
-            domain: try json.get("domain"),
-            path: try json.get("path")
+        try self.init(
+            id: json.get("id"),
+            environment: ModelOrIdentifier(json: json.get("environment")),
+            certificate: ModelOrIdentifier(json: json.get("certificate")),
+            domain: json.get("domain"),
+            path: json.get("path")
         )
     }
 

@@ -31,6 +31,7 @@ extension OrganizationPermission {
             
             // Project
             .createProject,
+            .adminProject,
             
             // Meta
             .updatePermission
@@ -59,6 +60,10 @@ extension OrganizationPermission {
     
     public static var createProject: OrganizationPermission {
         return OrganizationPermission(key: "projectCreate", name: "" , description: "")
+    }
+    
+    public static var adminProject: OrganizationPermission {
+        return OrganizationPermission(key: "projectAdmin", name: "" , description: "")
     }
     
     // Meta

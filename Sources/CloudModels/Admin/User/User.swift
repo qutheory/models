@@ -8,7 +8,7 @@ public final class User: Extensible, Identifiable {
     public var extend: [String: Any]
 
     public init(
-        _ id: Identifier? = nil,
+        id: Identifier? = nil,
         name: Name,
         image: String?,
         email: String,
@@ -28,11 +28,11 @@ import JSON
 
 extension User: JSONConvertible {
     public convenience init(json: JSON) throws {
-        self.init(
-            try json.get("id"),
-            name: try Name(json: json.get("name")),
-            image: try json.get("image"),
-            email: try json.get("email")
+        try self.init(
+            id: json.get("id"),
+            name: Name(json: json.get("name")),
+            image: json.get("image"),
+            email: json.get("email")
         )
     }
 
