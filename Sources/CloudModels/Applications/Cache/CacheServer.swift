@@ -12,7 +12,7 @@ public final class CacheServer: Extensible, Identifiable {
     public var instanceClass: String
     public var storageCapacity: Int
     public var region: String
-    public var organization: ModelOrIdentifier<Organization>
+    public var organization: ModelOrIdentifier<Organization>?
     public var extend: [String : Any]
     
     public init(
@@ -23,8 +23,7 @@ public final class CacheServer: Extensible, Identifiable {
         kindVersion: String,
         instanceClass: String,
         storageCapacity: Int,
-        region: String,
-        organization: ModelOrIdentifier<Organization>
+        region: String
     ) {
         self.id = id
         self.name = name
@@ -34,7 +33,6 @@ public final class CacheServer: Extensible, Identifiable {
         self.instanceClass = instanceClass
         self.storageCapacity = storageCapacity
         self.region = region
-        self.organization = organization
         self.extend = [:]
     }
 }
@@ -52,9 +50,11 @@ extension CacheServer: JSONConvertible {
             kindVersion: json.get("kindVersion"),
             instanceClass: json.get("instanceClass"),
             storageCapacity: json.get("storageCapacity"),
-            region: json.get("region"),
-            organization: ModelOrIdentifier(json: json.get("organization.id"))
+            region: json.get("region")
         )
+        if let orgId = try json.get("organization.id") as Identifier? {
+            organization = .identifier(orgId)
+        }
     }
     
     public func makeJSON() throws -> JSON {
@@ -67,7 +67,7 @@ extension CacheServer: JSONConvertible {
         try json.set("kindVersion", kindVersion)
         try json.set("storageCapacity", storageCapacity)
         try json.set("region", region)
-        try json.set("organization.id", organization.getIdentifier())
+        try json.set("organization.id", organization?.getIdentifier())
         return json
     }
 }

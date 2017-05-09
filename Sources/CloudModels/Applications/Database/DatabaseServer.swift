@@ -13,7 +13,7 @@ public final class DatabaseServer: Extensible, Identifiable {
     public var storageCapacity: Int
     public var region: String
     public var multiAZ: Bool
-    public var organization: ModelOrIdentifier<Organization>
+    public var organization: ModelOrIdentifier<Organization>?
     public var extend: [String : Any]
     
     public init(
@@ -25,8 +25,7 @@ public final class DatabaseServer: Extensible, Identifiable {
         instanceClass: String,
         storageCapacity: Int,
         region: String,
-        multiAZ: Bool,
-        organization: ModelOrIdentifier<Organization>
+        multiAZ: Bool
     ) {
         self.id = id
         self.name = name
@@ -37,7 +36,6 @@ public final class DatabaseServer: Extensible, Identifiable {
         self.storageCapacity = storageCapacity
         self.region = region
         self.multiAZ = multiAZ
-        self.organization = organization
         self.extend = [:]
     }
 }
@@ -56,9 +54,11 @@ extension DatabaseServer: JSONConvertible {
             instanceClass: json.get("instanceClass"),
             storageCapacity: json.get("storageCapacity"),
             region: json.get("region"),
-            multiAZ: json.get("multiAZ"),
-            organization: ModelOrIdentifier(json: json.get("organization.id"))
+            multiAZ: json.get("multiAZ")
         )
+        if let orgId = try json.get("organization.id") as Identifier? {
+            organization = .identifier(orgId)
+        }
     }
     
     public func makeJSON() throws -> JSON {
@@ -72,7 +72,7 @@ extension DatabaseServer: JSONConvertible {
         try json.set("storageCapacity", storageCapacity)
         try json.set("region", region)
         try json.set("multiAZ", multiAZ)
-        try json.set("organization.id", organization.getIdentifier())
+        try json.set("organization.id", organization?.getIdentifier())
         return json
     }
 }

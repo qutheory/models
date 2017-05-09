@@ -4,6 +4,7 @@ public final class Project: Extensible, Identifiable {
     public var color: String
     public var organization: ModelOrIdentifier<Organization>
     public var extend: [String: Any]
+    public var cost: Cost?
     
     public init(
         id: Identifier? = nil,
@@ -32,6 +33,7 @@ extension Project: JSONConvertible {
                 json.get("organization")
             )
         )
+        cost = try json.get("cost")
     }
     
     public func makeJSON() throws -> JSON {
@@ -40,6 +42,7 @@ extension Project: JSONConvertible {
         try json.set("name", name)
         try json.set("color", color)
         try json.set("organization", organization.makeJSON())
+        try json.set("cost", cost)
         return json
     }
 }

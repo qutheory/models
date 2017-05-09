@@ -80,31 +80,26 @@ extension ReplicaSize: CustomStringConvertible {
 
 // MARK: Cost
 
-
 extension ReplicaSize {
-    public var monthlyCost: Double {
+    public var cost: Cost {
+        let monthly: Double
+        
         switch self {
         case .free:
-            return 0
+            monthly = 0
         case .hobby:
-            return 6.0
+            monthly = 6.0
         case .small:
-            return 29.0
+            monthly = 29.0
         case .medium:
-            return 61.0
+            monthly = 61.0
         case .large:
-            return 222.0
+            monthly = 222.0
         case .xlarge:
-            return 375.0
+            monthly = 375.0
         }
+        
+        return Cost(monthly: monthly)
     }
 }
 
-
-let hoursInMonth = 730.0
-
-extension Double {
-    public var monthlyToHourly: Double {
-        return self / hoursInMonth
-    }
-}

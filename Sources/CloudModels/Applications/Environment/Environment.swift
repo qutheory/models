@@ -9,6 +9,7 @@ public final class Environment: Extensible, Identifiable {
     public var running: Bool {
         return replicas > 0
     }
+    public var cost: Cost?
 
     public init(
         id: Identifier? = nil,
@@ -26,10 +27,6 @@ public final class Environment: Extensible, Identifiable {
         self.defaultBranch = defaultBranch ?? "master"
         self.extend = [:]
     }
-    
-    public var monthlyCost: Double {
-        return replicaSize.monthlyCost * Double(replicas)
-    }
 }
 
 // MARK: JSON
@@ -45,6 +42,7 @@ extension Environment: JSONConvertible {
             replicaSize: json.get("replicaSize"),
             defaultBranch: json.get("defaultBranch")
         )
+        cost = try json.get("cost")
     }
 
     public func makeJSON() throws -> JSON {
@@ -56,7 +54,7 @@ extension Environment: JSONConvertible {
         try json.set("defaultBranch", defaultBranch)
         try json.set("hosting", hosting.makeJSON())
         try json.set("running", running)
-        try json.set("monthlyCost", monthlyCost)
+        try json.set("cost", cost)
         return json
     }
 }
