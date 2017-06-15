@@ -83,23 +83,22 @@ extension ReplicaSize: CustomStringConvertible {
 extension ReplicaSize {
     public var cost: Cost {
         let monthly: Double
-        
+
         switch self {
         case .free:
             monthly = 0
         case .hobby:
-            monthly = 6.0
+            monthly = 6
         case .small:
-            monthly = 29.0
+            monthly = 30
         case .medium:
-            monthly = 61.0
+            monthly = 65
         case .large:
-            monthly = 222.0
+            monthly = 225
         case .xlarge:
-            monthly = 375.0
+            monthly = 375
         }
-        
+
         return Cost(monthly: monthly)
     }
 }
-
