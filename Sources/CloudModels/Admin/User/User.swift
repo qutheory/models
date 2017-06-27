@@ -5,6 +5,7 @@ public final class User: Extensible, Identifiable {
     public var image: String?
     public var email: String
     public var password: String?
+    public var isBeta: Bool
     public var extend: [String: Any]
 
     public init(
@@ -12,13 +13,15 @@ public final class User: Extensible, Identifiable {
         name: Name,
         image: String?,
         email: String,
-        password: String? = nil
+        password: String? = nil,
+        isBeta: Bool = false
     ) {
         self.id = id
         self.name = name
         self.image = image
         self.email = email
         self.password = password
+        self.isBeta = isBeta
         self.extend = [:]
     }
 }
@@ -32,7 +35,8 @@ extension User: JSONConvertible {
             id: json.get("id"),
             name: Name(json: json.get("name")),
             image: json.get("image"),
-            email: json.get("email")
+            email: json.get("email"),
+            isBeta: json.get("isBeta")
         )
     }
 
@@ -42,6 +46,7 @@ extension User: JSONConvertible {
         try json.set("name", name.makeJSON())
         try json.set("image", image)
         try json.set("email", email)
+        try json.set("isBeta", isBeta)
         return json
     }
 }
