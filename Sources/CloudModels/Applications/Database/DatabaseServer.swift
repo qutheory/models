@@ -103,6 +103,10 @@ extension DatabaseServer.Kind: NodeConvertible {
             return "aurora"
         case .mysql:
             return "mysql"
+        case .postgresql:
+            return "postgresql"
+        case .mongodb:
+            return "mongodb"
         }
     }
 }
