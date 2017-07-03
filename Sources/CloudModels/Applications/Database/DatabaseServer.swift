@@ -90,6 +90,10 @@ extension DatabaseServer.Kind: NodeConvertible {
             self = .aurora
         case "mysql":
             self = .mysql
+        case "postgresql":
+            self = .postgresql
+        case "mongodb":
+            self = .mongodb
         default:
             throw NodeError.unableToConvert(
                 input: node,
