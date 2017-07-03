@@ -2,6 +2,8 @@ public final class DatabaseServer: Extensible, Identifiable {
     public enum Kind {
         case mysql
         case aurora
+        case postgresql
+        case mongodb
     }
     
     public var id: Identifier?
