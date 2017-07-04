@@ -96,6 +96,10 @@ extension DatabaseServer.Kind: NodeConvertible {
             )
         }
     }
+
+    public var description: String {
+        return "\(self)"
+    }
     
     public func makeNode(in context: Context?) throws -> Node {
         switch self {
