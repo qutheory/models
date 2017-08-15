@@ -11,6 +11,7 @@ public final class Transaction: Extensible {
     public var hostingId: Identifier?
     public var applicationId: Identifier?
     public var projectId: Identifier?
+    public var createdAt: Date?
     public var extend: [String: Any]
 
     public init(
@@ -55,6 +56,7 @@ extension Transaction: JSONConvertible {
             projectId: json.get("projectId")
         )
         id = try json.get("id")
+        createdAt = try json.get("createdAt")
     }
 
     public func makeJSON() throws -> JSON {
@@ -69,6 +71,7 @@ extension Transaction: JSONConvertible {
         try json.set("hostingId", hostingId)
         try json.set("applicationId", applicationId)
         try json.set("projectId", projectId)
+        try json.set("createdAt", createdAt)
         return json
     }
 }

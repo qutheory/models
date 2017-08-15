@@ -2,10 +2,10 @@ public enum Service {
     // all entity types are optional since they may
     // have since been deleted.
     // thus, all information required for billing must be stored here.
-    case environment(Environment?)
-    case database(Database?)
-    case cache(Cache?)
-    case databaseServer(DatabaseServer?)
+    case environment(ModelOrIdentifier<Environment>?)
+    case database(ModelOrIdentifier<Database>?)
+    case cache(ModelOrIdentifier<Cache>?)
+    case databaseServer(ModelOrIdentifier<DatabaseServer>?)
 }
 
 extension Service {
@@ -25,13 +25,13 @@ extension Service {
     public var id: Identifier? {
         switch self {
         case .cache(let cache):
-            return cache?.id
+            return cache?.getIdentifier()
         case .database(let db):
-            return db?.id
+            return db?.getIdentifier()
         case .environment(let env):
-            return env?.id
+            return env?.getIdentifier()
         case .databaseServer(let dbs):
-            return dbs?.id
+            return dbs?.getIdentifier()
         }
     }
 }
@@ -39,7 +39,30 @@ extension Service {
 // MARK: JSON
 import JSON
 
-extension Service: JSONRepresentable {
+fileprivate struct ServiceError: Error {
+    let reason: String
+}
+
+extension Service: JSONConvertible {
+    public init(json: JSON) throws {
+        let id = try json.get("id") as Identifier
+        let type = try json.get("type") as String
+
+        switch type {
+        case "cache":
+            self = .cache(.identifier(id))
+        case "database":
+            self = .database(.identifier(id))
+        case "environment":
+            self = .environment(.identifier(id))
+        case "db-server":
+            self = .databaseServer(.identifier(id))
+        default:
+            throw ModelsError.unspecified(
+                ServiceError(reason: "Service type `\(type)` not supported.")
+            )
+        }
+    }
 
     public func makeJSON() throws -> JSON {
         var json = JSON()
