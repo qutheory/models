@@ -4,6 +4,7 @@ public final class Transaction: Extensible {
     public var amount: Double
     public var preBalance: Double
     public var postBalance: Double
+    public var desc: String
 
     // filter transactions
     public var service: Service
@@ -19,6 +20,7 @@ public final class Transaction: Extensible {
         amount: Double,
         preBalance: Double,
         postBalance: Double,
+        desc: String,
         service: Service,
         environmentId: Identifier?,
         hostingId: Identifier?,
@@ -29,6 +31,7 @@ public final class Transaction: Extensible {
         self.amount = amount
         self.preBalance = preBalance
         self.postBalance = postBalance
+        self.desc = desc
         self.service = service
         self.environmentId = environmentId
         self.hostingId = hostingId
@@ -49,6 +52,7 @@ extension Transaction: JSONConvertible {
             amount: json.get("amount"),
             preBalance: json.get("preBalance"),
             postBalance: json.get("postBalance"),
+            desc: json.get("desc"),
             service: json.get("service"),
             environmentId: json.get("environmentId"),
             hostingId: json.get("hostingId"),
@@ -66,6 +70,7 @@ extension Transaction: JSONConvertible {
         try json.set("amount", amount)
         try json.set("preBalance", preBalance)
         try json.set("postBalance", postBalance)
+        try json.set("desc", desc)
         try json.set("service", service)
         try json.set("environmentId", environmentId)
         try json.set("hostingId", hostingId)
