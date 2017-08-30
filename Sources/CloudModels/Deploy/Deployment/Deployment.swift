@@ -7,7 +7,7 @@ public final class Deployment: Extensible, Identifiable {
     public var version: Int
     public let type: Method
     public let databaseId: Identifier
-    public let git: (url: String, branch: String)
+    public var git: (url: String, branch: String, hash: String)
     public let replicas: Int
     public var replicaSize: String
     public let domains: [String]
@@ -21,7 +21,7 @@ public final class Deployment: Extensible, Identifiable {
         version: Int,
         type: Method,
         databaseId: Identifier,
-        git: (url: String, branch: String),
+        git: (url: String, branch: String, hash: String),
         replicas: Int,
         replicaSize: String,
         domains: [String]
@@ -61,7 +61,7 @@ extension Deployment: JSONConvertible {
             version: json["version"]?.int ?? 0,
             type: Method(json: json.get("type")),
             databaseId: json.get("database.id"),
-            git: (json.get("git.url"), json.get("git.branch")),
+            git: (json.get("git.url"), json.get("git.branch"), json.get("git.hash")),
             replicas: json.get("replicas"),
             replicaSize: json.get("replicaSize"),
             domains: json.get("domains")
@@ -79,6 +79,7 @@ extension Deployment: JSONConvertible {
         try json.set("database.id", databaseId)
         try json.set("git.url", git.url)
         try json.set("git.branch", git.branch)
+        try json.set("git.hash", git.hash)
         try json.set("replicas", replicas)
         try json.set("replicaSize", replicaSize)
         try json.set("domains", domains)
