@@ -2,17 +2,24 @@ public final class Organization: Extensible, Identifiable {
     public var id: Identifier?
     public var name: String
     public var credits: Double
+    public var wallet: ModelOrIdentifier<Wallet>?
     public var extend: [String: Any]
     public var cost: Cost?
+
+    public var hasWallet: Bool {
+        return wallet != nil
+    }
 
     public init(
         id: Identifier? = nil,
         name: String,
-        credits: Double = 0
+        credits: Double = 0,
+        wallet: ModelOrIdentifier<Wallet>?
     ) {
         self.id = id
         self.name = name
         self.credits = credits
+        self.wallet = wallet
         self.extend = [:]
     }
 }
@@ -25,7 +32,8 @@ extension Organization: JSONConvertible {
         try self.init(
             id: json.get("id"),
             name: json.get("name"),
-            credits: json.get("credits")
+            credits: json.get("credits"),
+            wallet: json.get("wallet")
         )
         cost = try json.get("cost")
     }
@@ -36,6 +44,7 @@ extension Organization: JSONConvertible {
         try json.set("name", name)
         try json.set("credits", credits)
         try json.set("cost", cost)
+        try json.set("wallet", wallet)
         return json
     }
 }
