@@ -27,6 +27,8 @@ public final class Organization: Extensible, Identifiable {
         self.name = name
         self.credits = credits
         self.wallet = wallet
+        self.refillThreshold = refillThreshold
+        self.refillCredits = refillCredits
         self.extend = [:]
     }
 }
