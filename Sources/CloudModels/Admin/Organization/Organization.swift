@@ -6,6 +6,11 @@ public final class Organization: Extensible, Identifiable {
     public var extend: [String: Any]
     public var cost: Cost?
 
+    /// The minimum amount of credits this organization
+    /// should have before billing
+    public var refillThreshold: Double?
+    public var refillCredits: Double?
+
     public var hasWallet: Bool {
         return wallet != nil
     }
@@ -14,7 +19,9 @@ public final class Organization: Extensible, Identifiable {
         id: Identifier? = nil,
         name: String,
         credits: Double = 0,
-        wallet: ModelOrIdentifier<Wallet>?
+        wallet: ModelOrIdentifier<Wallet>?,
+        refillThreshold: Double?,
+        refillCredits: Double?
     ) {
         self.id = id
         self.name = name
@@ -33,7 +40,9 @@ extension Organization: JSONConvertible {
             id: json.get("id"),
             name: json.get("name"),
             credits: json.get("credits"),
-            wallet: json.get("wallet")
+            wallet: json.get("wallet"),
+            refillThreshold: json.get("refillThreshold"),
+            refillCredits: json.get("refillCredits")
         )
         cost = try json.get("cost")
     }
@@ -45,6 +54,8 @@ extension Organization: JSONConvertible {
         try json.set("credits", credits)
         try json.set("cost", cost)
         try json.set("wallet", wallet)
+        try json.set("refillThreshold", refillThreshold)
+        try json.set("refillCredits", refillCredits)
         return json
     }
 }
