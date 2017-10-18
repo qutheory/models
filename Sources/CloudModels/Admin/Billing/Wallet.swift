@@ -43,10 +43,29 @@ extension Wallet: JSONConvertible {
     public func makeJSON() throws -> JSON {
         var json = JSON()
         try json.set("id", id)
-        try json.set("walletType", walletType.rawValue)
+        try json.set("walletType", walletType)
         try json.set("walletId", walletId)
         try json.set("user", user)
         try json.set("name", name)
         return json
+    }
+}
+
+extension WalletType: JSONConvertible {
+    public init(json: JSON) throws {
+        switch json.string ?? "" {
+        case "stripe":
+            self = .stripe
+        default:
+            throw NodeError.unableToConvert(
+                input: Node(json.wrapped),
+                expectation: "wallet type",
+                path: []
+            )
+        }
+    }
+
+    public func makeJSON() throws -> JSON {
+        return JSON(rawValue)
     }
 }
