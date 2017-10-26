@@ -2,17 +2,38 @@ public final class Organization: Extensible, Identifiable {
     public var id: Identifier?
     public var name: String
     public var credits: Double
+    public var wallet: ModelOrIdentifier<Wallet>?
     public var extend: [String: Any]
     public var cost: Cost?
+
+    /// The minimum amount of credits this organization
+    /// should have before billing
+    public var refillThreshold: Double?
+    public var refillCredits: Double?
+
+    /// The email to use regarding billing.
+    public var billingEmail: String?
+
+    public var hasWallet: Bool {
+        return wallet != nil
+    }
 
     public init(
         id: Identifier? = nil,
         name: String,
-        credits: Double = 0
+        credits: Double = 0,
+        wallet: ModelOrIdentifier<Wallet>?,
+        refillThreshold: Double?,
+        refillCredits: Double?,
+        billingEmail: String?
     ) {
         self.id = id
         self.name = name
         self.credits = credits
+        self.wallet = wallet
+        self.refillThreshold = refillThreshold
+        self.refillCredits = refillCredits
+        self.billingEmail = billingEmail
         self.extend = [:]
     }
 }
@@ -25,7 +46,11 @@ extension Organization: JSONConvertible {
         try self.init(
             id: json.get("id"),
             name: json.get("name"),
-            credits: json.get("credits")
+            credits: json.get("credits"),
+            wallet: json.get("wallet"),
+            refillThreshold: json.get("refillThreshold"),
+            refillCredits: json.get("refillCredits"),
+            billingEmail: json.get("billingEmail")
         )
         cost = try json.get("cost")
     }
@@ -36,6 +61,10 @@ extension Organization: JSONConvertible {
         try json.set("name", name)
         try json.set("credits", credits)
         try json.set("cost", cost)
+        try json.set("wallet", wallet)
+        try json.set("refillThreshold", refillThreshold)
+        try json.set("refillCredits", refillCredits)
+        try json.set("billingEmail", billingEmail)
         return json
     }
 }
