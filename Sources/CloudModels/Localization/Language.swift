@@ -10,7 +10,7 @@ public final class Language: Extensible, Identifiable {
         name: String,
         locale: String,
         direction: String
-        ) {
+    ) {
         self.id = id
         self.name = name
         self.locale = locale
