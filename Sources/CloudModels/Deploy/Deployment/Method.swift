@@ -2,6 +2,7 @@ extension Deployment {
     public enum Method {
         case code(CodeMethod)
         case scale
+        case resize
         case domain
     }
 }
@@ -20,6 +21,8 @@ extension Deployment.Method: JSONConvertible {
             self = .scale
         case "domain":
             self = .domain
+        case "resize":
+	        self = .resize
         default:
             throw NodeError.unableToConvert(
                 input: Node(name),
@@ -37,6 +40,8 @@ extension Deployment.Method: JSONConvertible {
             try json.set("method", method.makeJSON())
         case .scale:
             try json.set("name", "scale")
+        case .resize:
+            try json.set("name", "resize")
         case .domain:
             try json.set("name", "domain")
         }
