@@ -1,20 +1,23 @@
-public final class LocalizationKey: Extensible, Identifiable {
+public final class LocalizationCache: Extensible, Identifiable {
     public var id: Identifier?
     public var localization: ModelOrIdentifier<Localization>
-    public var key: String
-    public var type: String
+    public var language: ModelOrIdentifier<Language>
+    public var version: Int
+    public var data: String
     public var extend: [String: Any]
-    
+
     public init(
         id: Identifier? = nil,
         localization: ModelOrIdentifier<Localization>,
-        key: String,
-        type: String
+        language: ModelOrIdentifier<Language>,
+        version: Int,
+        data: String
     ) {
         self.id = id
         self.localization = localization
-        self.key = key
-        self.type = type
+        self.language = language
+        self.version = version
+        self.data = data
         self.extend = [:]
     }
 }
@@ -22,22 +25,25 @@ public final class LocalizationKey: Extensible, Identifiable {
 // MARK: JSON
 import JSON
 
-extension LocalizationKey: JSONConvertible {
+extension LocalizationCache: JSONConvertible {
     public convenience init(json: JSON) throws {
         try self.init(
             id: json.get("id"),
             localization: json.get("localization"),
-            key: json.get("key"),
-            type: json.get("type")
+            language: json.get("language"),
+            version: json.get("version"),
+            data: json.get("data")
         )
     }
-    
+
     public func makeJSON() throws -> JSON {
         var json = JSON()
         try json.set("id", id)
-        try json.set("key", key)
-        try json.set("type", type)
+        try json.set("version", version)
+        try json.set("data", data)
         try json.set("localization", localization)
+        try json.set("language", language)
         return json
     }
 }
+
