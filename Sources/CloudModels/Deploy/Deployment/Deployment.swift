@@ -11,6 +11,8 @@ public final class Deployment: Extensible, Identifiable {
     public let replicas: Int
     public var replicaSize: String
     public let domains: [String]
+    public let serverVersion: String
+    public var deployHostname: String
     public var extend: [String: Any]
 
     public init(
@@ -24,6 +26,7 @@ public final class Deployment: Extensible, Identifiable {
         git: (url: String, branch: String),
         replicas: Int,
         replicaSize: String,
+        serverVersion: String,
         domains: [String]
     ) {
         self.id = id
@@ -37,6 +40,8 @@ public final class Deployment: Extensible, Identifiable {
         self.replicas = replicas
         self.replicaSize = replicaSize
         self.domains = domains
+        self.serverVersion = serverVersion
+        self.deployHostname = ""
         self.extend = [:]
     }
 }
@@ -64,6 +69,7 @@ extension Deployment: JSONConvertible {
             git: (json.get("git.url"), json.get("git.branch")),
             replicas: json.get("replicas"),
             replicaSize: json.get("replicaSize"),
+            serverVersion: json.get("serverVersion"),
             domains: json.get("domains")
         )
     }
@@ -81,6 +87,8 @@ extension Deployment: JSONConvertible {
         try json.set("git.branch", git.branch)
         try json.set("replicas", replicas)
         try json.set("replicaSize", replicaSize)
+        try json.set("serverVersion", serverVersion)
+        try json.set("deployHostname", deployHostname)
         try json.set("domains", domains)
         return json
     }
